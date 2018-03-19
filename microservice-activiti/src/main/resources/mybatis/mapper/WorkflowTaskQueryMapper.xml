@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.activiti.business.dao.WorkflowTaskQueryMapper">
+    <resultMap id="BaseResultMap" type="com.java.activiti.business.entity.mybatis.WorkflowTaskQueryEntity">
+        <result column="taskId" jdbcType="VARCHAR" property="taskId"/>
+        <result column="flowName" jdbcType="VARCHAR" property="flowName"/>
+        <result column="currentTaskName" jdbcType="VARCHAR" property="currentTaskName"/>
+        <result column="processDefineKey" jdbcType="VARCHAR" property="processDefineKey"/>
+        <result column="currentNode" jdbcType="VARCHAR" property="currentNode"/>
+        <result column="bussinessKey" jdbcType="VARCHAR" property="bussinessKey"/>
+        <result column="processInstanceId" jdbcType="VARCHAR" property="processInstanceId"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="participateTime" jdbcType="VARCHAR" property="participateTime"/>
+        <result column="createUserName" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="startTime" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!--我的待办，分页查询-->
+    <select id="queryTodo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT ar.ID_ taskId,
+        cft.flow_name flowName,
+        ar.NAME_ currentTaskName,
+        cft.process_define_key processDefineKey,
+        ar.TASK_DEF_KEY_ currentNode,
+        cft.business_key bussinessKey,
+        cft.process_instance_id processInstanceId,
+        (SELECT user_name FROM  user_info  where user_id=cft.create_user) createUserName,
+        cft.create_time startTime,
+        cft.update_time updateTime
+        FROM act_ru_task ar
+        INNER JOIN csm_flow_task cft ON ar.PROC_INST_ID_ = cft.process_instance_id
+        WHERE ar.ID_ IN
+        (
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        WHERE ar.ASSIGNEE_ = #{userId,jdbcType=VARCHAR}
+        UNION ALL
+        -- 查询自定义授权对象是单一用户的
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        INNER JOIN csm_act_assignee_object ca
+        ON ar.ASSIGNEE_ = ca.assignee_id
+        AND ca.assignee_type = #{userTypeEnumCode,jdbcType=VARCHAR}
+        WHERE ca.assignee_object_id = #{userId,jdbcType=VARCHAR}
+        UNION ALL
+        -- 查询自定义授权对象是角色的
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        INNER JOIN csm_act_assignee_object ca
+        ON ar.ASSIGNEE_ = ca.assignee_id
+        AND ca.assignee_type = #{roleTypeEnumCode,jdbcType=VARCHAR}
+        WHERE ca.assignee_object_id IN (SELECT ur.role_code
+        FROM user_role ur
+        WHERE ur.user_id = #{userId,jdbcType=VARCHAR}))
+        <if test="keywords!='' and keywords != null">
+            AND upper( cft.flow_name) LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+        ORDER BY cft.create_time DESC
+        LIMIT #{startRecord,jdbcType=VARCHAR}, #{endRecord,jdbcType=VARCHAR}
+    </select>
+
+    <!--我的待办总量-->
+    <select id="queryTodoCount" resultType="java.lang.Integer">
+        SELECT count(ar.ID_) total
+        FROM act_ru_task ar
+        INNER JOIN csm_flow_task cft ON ar.PROC_INST_ID_ = cft.process_instance_id
+        WHERE ar.ID_ IN
+        (
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        WHERE ar.ASSIGNEE_ = #{userId,jdbcType=VARCHAR}
+        UNION ALL
+        -- 查询自定义授权对象是单一用户的
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        INNER JOIN csm_act_assignee_object ca
+        ON ar.ASSIGNEE_ = ca.assignee_id
+        AND ca.assignee_type = #{userTypeEnumCode,jdbcType=VARCHAR}
+        WHERE ca.assignee_object_id = #{userId,jdbcType=VARCHAR}
+        UNION ALL
+        -- 查询自定义授权对象是角色的
+        SELECT ar.ID_
+        FROM act_ru_task ar
+        INNER JOIN csm_act_assignee_object ca
+        ON ar.ASSIGNEE_ = ca.assignee_id
+        AND ca.assignee_type = #{roleTypeEnumCode,jdbcType=VARCHAR}
+        WHERE ca.assignee_object_id IN (SELECT ur.role_code
+        FROM user_role ur
+        WHERE ur.user_id = #{userId,jdbcType=VARCHAR}))
+        <if test="keywords!='' and keywords != null">
+            AND upper( cft.flow_name) LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+    </select>
+
+
+    <!--我参与的-->
+    <select id="queryParticipated" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT aht.ID_
+        taskId,
+        cft.flow_name
+        flowName,
+        cft.process_define_key
+        processDefineKey,
+        aht.TASK_DEF_KEY_
+        currentNode,
+        aht.NAME_
+        currentTaskName,
+        cft.business_key
+        bussinessKey,
+        cft.process_instance_id
+        processInstanceId,
+        (SELECT user_name
+        FROM user_info
+        WHERE user_id = cft.create_user)
+        createUserName,
+        cft.create_time
+        startTime,
+        aht.START_TIME_ updateTime,
+        cft.status
+        status
+        FROM csm_flow_task cft
+        INNER JOIN act_hi_taskinst aht
+        ON cft.process_instance_id = aht.PROC_INST_ID_
+        WHERE aht.ID_ IN
+        (       -- 中层查询，主要是查询符合条件的历史数据并去重，因为process_instance_id查询出来有多条，此处取第一条
+        SELECT id
+        FROM (SELECT aht0.PROC_INST_ID_,
+        substring_index(group_concat(aht0.ID_ ORDER BY aht0.START_TIME_ DESC), ',', 1) id
+        FROM act_hi_taskinst aht0
+        WHERE aht0.PROC_INST_ID_ IN
+        (                               -- 内层查询，主要是查询出符合条件的数据
+        SELECT process_instance_id
+        FROM (SELECT DISTINCT cft1.process_instance_id
+        FROM csm_flow_task cft1
+        INNER JOIN act_hi_taskinst ah1
+        ON cft1.process_instance_id =
+        ah1.PROC_INST_ID_
+        WHERE ah1.ASSIGNEE_ IN
+            (
+            SELECT #{userId,jdbcType=VARCHAR} FROM dual
+
+            UNION
+            SELECT caa.id
+            FROM csm_act_assignee_object ca
+            INNER JOIN csm_act_assignee caa
+            ON ca.assignee_id = caa.id
+            WHERE ca.assignee_object_id = #{userId,jdbcType=VARCHAR}
+            AND ca.assignee_type='USER'
+
+            UNION
+            SELECT caa1.id
+            FROM csm_act_assignee_object ca1
+            INNER JOIN
+            csm_act_assignee caa1
+            ON ca1.assignee_id = caa1.id
+            INNER JOIN user_role ur
+            ON ca1.assignee_object_id=ur.role_code
+            WHERE  ur.user_id =  #{userId,jdbcType=VARCHAR}
+            AND ca1.assignee_type='ROLE'
+
+        )
+        <if test="keywords!='' and keywords != null">
+            AND cft1.flow_name LIKE  concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="taskStatus!='' and taskStatus != null">
+            AND cft1.status= #{taskStatus,jdbcType=VARCHAR}
+        </if>
+        -- 去掉正在进行的
+        AND NOT EXISTS (
+        SELECT ar.ID_ FROM  act_ru_task ar WHERE ah1.ID_ = ar.ID_)
+
+        order by ah1.START_TIME_ desc
+        LIMIT #{startRecord,jdbcType=VARCHAR}, #{endRecord,jdbcType=VARCHAR}) t)
+        GROUP BY aht0.PROC_INST_ID_
+        ORDER BY aht0.START_TIME_ DESC) id_result)
+        order by aht.START_TIME_ desc
+    </select>
+
+    <!--我参与的总量-->
+    <select id="queryParticipatedCount" resultType="java.lang.Integer">
+        SELECT count(distinct cft1.process_instance_id) total
+        FROM csm_flow_task cft1
+        INNER JOIN act_hi_taskinst ah1
+        ON cft1.process_instance_id = ah1.PROC_INST_ID_
+        WHERE ah1.ASSIGNEE_ IN
+        (
+
+        SELECT #{userId,jdbcType=VARCHAR} FROM dual
+
+        UNION
+        SELECT caa.id
+        FROM csm_act_assignee_object ca
+        INNER JOIN csm_act_assignee caa
+        ON ca.assignee_id = caa.id
+        WHERE ca.assignee_object_id = #{userId,jdbcType=VARCHAR}
+        AND ca.assignee_type='USER'
+
+        UNION
+        SELECT caa1.id
+        FROM csm_act_assignee_object ca1
+        INNER JOIN
+        csm_act_assignee caa1
+        ON ca1.assignee_id = caa1.id
+        INNER JOIN user_role ur
+        ON ca1.assignee_object_id=ur.role_code
+        WHERE  ur.user_id =  #{userId,jdbcType=VARCHAR}
+        AND ca1.assignee_type='ROLE'
+
+        )
+        <if test="keywords!='' and keywords != null">
+            AND cft1.flow_name LIKE  concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="taskStatus!='' and taskStatus != null">
+            AND cft1.status= #{taskStatus,jdbcType=VARCHAR}
+        </if>
+        -- 去掉正在进行的
+        AND NOT EXISTS (
+        SELECT ar.ID_ FROM  act_ru_task ar WHERE ah1.ID_ = ar.ID_)
+    </select>
+
+    <!--我发起的-->
+    <select id="queryStarted" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT ah.ID_
+        taskId,
+        cf.flow_name
+        flowName,
+        cf.status
+        status,
+        ah.NAME_
+        currentTaskName,
+        cf.process_define_key
+        processDefineKey,
+        ah.TASK_DEF_KEY_
+        currentNode,
+        cf.business_key
+        bussinessKey,
+        cf.process_instance_id
+        processInstanceId,
+        (SELECT user_name
+        FROM user_info
+        WHERE user_id = cf.create_user)
+        createUserName,
+        cf.create_time
+        startTime,
+        cf.update_time
+        updateTime
+        FROM csm_flow_task cf
+        LEFT JOIN act_hi_taskinst ah
+        ON cf.process_instance_id = ah.PROC_INST_ID_
+        WHERE ah.ID_ IN
+        (SELECT taskId
+        FROM (SELECT cf1.id,
+        substring_index(group_concat(ah1.ID_ ORDER BY ah1.START_TIME_ DESC ), ',', 1) taskId
+        FROM csm_flow_task cf1
+        LEFT JOIN act_hi_taskinst ah1
+        ON cf1.process_instance_id = ah1.PROC_INST_ID_
+        WHERE cf1.create_user =  #{userId,jdbcType=VARCHAR}
+        <if test="keywords!='' and keywords != null">
+            AND upper( cf1.flow_name) LIKE upper(concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+        <if test="taskStatus!='' and taskStatus != null">
+            AND cf1.status= #{taskStatus,jdbcType=VARCHAR}
+        </if>
+        GROUP BY cf1.id
+        ORDER BY cf1.create_time DESC
+        LIMIT #{startRecord,jdbcType=VARCHAR}, #{endRecord,jdbcType=VARCHAR}
+        ) t)
+        order by cf.create_time DESC
+    </select>
+
+    <!--我发起的总量-->
+    <select id="queryStartedCount" resultType="java.lang.Integer">
+        SELECT  count(cf.id) total
+        FROM  csm_flow_task cf
+        where cf.create_user= #{userId,jdbcType=VARCHAR}
+        <if test="keywords!='' and keywords != null">
+            AND upper( cf.flow_name) LIKE upper(concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+        <if test="taskStatus!='' and taskStatus != null">
+            AND cf.status= #{taskStatus,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+
+    <!--正在运行的任务，分页查询-->
+    <select id="queryRunTask" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT ar.ID_
+        taskId,
+        cft.flow_name
+        flowName,
+        ar.NAME_
+        currentTaskName,
+        cft.process_define_key
+        processDefineKey,
+        ar.TASK_DEF_KEY_
+        currentNode,
+        cft.business_key
+        bussinessKey,
+        cft.process_instance_id
+        processInstanceId,
+        (SELECT user_name
+        FROM user_info
+        WHERE user_id = cft.create_user)
+        createUserName,
+        cft.create_time
+        startTime,
+        cft.update_time
+        updateTime
+        FROM act_ru_task ar
+        INNER JOIN csm_flow_task cft
+        ON ar.PROC_INST_ID_ = cft.process_instance_id
+        <if test="keywords!='' and keywords != null">
+            AND upper( cft.flow_name) LIKE  upper(concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+        ORDER BY cft.create_time DESC
+        LIMIT #{startRecord,jdbcType=VARCHAR}, #{endRecord,jdbcType=VARCHAR}
+    </select>
+
+    <!--正在运行的任务总量-->
+    <select id="queryRunTaskCount" resultType="java.lang.Integer">
+        SELECT count(ar.ID_) total
+        FROM act_ru_task ar
+        INNER JOIN csm_flow_task cft ON ar.PROC_INST_ID_ = cft.process_instance_id
+        WHERE 1=1
+        <if test="keywords!='' and keywords != null">
+            AND upper( cft.flow_name) LIKE upper(concat(concat('%', #{keywords,jdbcType=VARCHAR}),'%'))
+        </if>
+    </select>
+</mapper>

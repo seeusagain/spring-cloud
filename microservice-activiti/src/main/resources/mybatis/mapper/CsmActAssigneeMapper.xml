@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.activiti.business.dao.CsmActAssigneeMapper">
+    <resultMap id="BaseResultMap" type="com.java.activiti.business.entity.mybatis.CsmActAssigneeEntity">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="process_key" jdbcType="VARCHAR" property="processKey"/>
+        <result column="process_name" jdbcType="VARCHAR" property="processName"/>
+        <result column="element_code" jdbcType="VARCHAR" property="elementCode"/>
+        <result column="element_name" jdbcType="VARCHAR" property="elementName"/>
+        <result column="is_multi_sign" jdbcType="VARCHAR" property="isMultiSign"/>
+        <result column="assignee_code" jdbcType="VARCHAR" property="assigneeCode"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, process_key, process_name, element_code, element_name, is_multi_sign, assignee_code, 
+    update_date, update_user, create_user, create_date
+  </sql>
+
+
+    <select id="queryDistinctList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select distinct process_key,process_name
+        from csm_act_assignee
+        where 1=1
+        <if test="keywords!='' and keywords != null">
+            AND (
+            process_key LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+            OR
+            process_name LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+            )
+        </if>
+        order by create_date
+        limit #{start,jdbcType=VARCHAR},#{end,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="countDistinctList" resultType="java.lang.Integer">
+        select count(distinct process_key,process_name)
+        from csm_act_assignee
+        where 1=1
+        <if test="keywords!='' and keywords != null">
+            AND (
+            process_key LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+            OR
+            process_name LIKE upper(concat('%', #{keywords,jdbcType=VARCHAR}),'%')
+            )
+        </if>
+    </select>
+
+</mapper>

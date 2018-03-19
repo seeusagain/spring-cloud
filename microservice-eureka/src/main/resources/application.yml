@@ -1,0 +1,26 @@
+server:
+  port: 8181
+  context-path: /microservice-eureka #  pom中的finalName
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+  client:
+    register-with-eureka: false #是否将自己注册到Eureka Server，默认为true
+    fetch-registry: false #是否从Eureka Server获取注册信息，默认为true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/microservice-eureka/eureka/
+#  server:
+#    enable-self-preservation: false #关闭自我保护
+
+#log
+logging:
+  config: classpath:logback-spring.xml
+
+#close security
+security:
+  basic:
+    enabled: false

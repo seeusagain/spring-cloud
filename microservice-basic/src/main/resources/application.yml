@@ -1,0 +1,67 @@
+server:
+  port: 8282
+  context-path: /microservice-basic
+spring:
+  application:
+    name: microservice-basic
+ #mysql
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+
+#jpa
+  jpa:
+    database: MYSQL
+    show-sql: true
+  jackson:
+    serialization:
+      indent_output: true
+#redis
+  redis:
+    host: 10.83.36.115
+    port: 6379
+    password: Redis
+
+#会话有效时长（秒）
+user:
+  token:
+    keep-time: 600
+
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+#    hostname: 10.83.36.115
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+#mybatis日志
+  level:
+     com:
+        java:
+          basic:
+             dao: debug
+
+#ldap
+ldap:
+  host: 10.10.0.5
+  port: 389
+
+#mybatis指向mapper的xml文件位置
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.java.basic.entity.mybatis
+

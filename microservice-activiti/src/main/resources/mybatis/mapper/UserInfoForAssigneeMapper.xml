@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.activiti.business.dao.UserInfoForAssigneeMapper">
+    <resultMap id="BaseResultMap" type="com.java.activiti.business.entity.mybatis.UserInfoForAssigneeEntity">
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="email" jdbcType="VARCHAR" property="emailAddress"/>
+    </resultMap>
+
+
+    <select id="queryUserInfoByprocessInstanceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+--         任务直接关联用户
+        SELECT ui.user_id, ui.user_name, ui.email
+        FROM act_ru_task ar INNER JOIN user_info ui ON ar.ASSIGNEE_ = ui.user_id
+        WHERE ar.PROC_INST_ID_ =#{processInstanceId,jdbcType=VARCHAR}
+        UNION
+--         任务关联自定义授权，授权类型为用户的
+        SELECT ui1.user_id, ui1.user_name, ui1.email
+        FROM act_ru_task ar1
+        INNER JOIN csm_act_assignee ca ON ar1.ASSIGNEE_ = ca.id
+        INNER JOIN csm_act_assignee_object cao
+        ON ca.id = cao.assignee_id AND cao.assignee_type = 'USER'
+        INNER JOIN user_info ui1 ON cao.assignee_object_id = ui1.user_id
+        WHERE ar1.PROC_INST_ID_ =#{processInstanceId,jdbcType=VARCHAR}
+        UNION
+--         任务关联自定义授权，授权类型为角色
+        SELECT ui2.user_id, ui2.user_name, ui2.email
+        FROM act_ru_task ar2
+        INNER JOIN csm_act_assignee ca ON ar2.ASSIGNEE_ = ca.id
+        INNER JOIN csm_act_assignee_object cao
+        ON ca.id = cao.assignee_id AND cao.assignee_type = 'ROLE'
+        INNER JOIN user_role ur ON cao.assignee_object_id = ur.role_code
+        INNER JOIN user_info ui2 ON ur.user_id = ui2.user_id
+        WHERE ar2.PROC_INST_ID_ = #{processInstanceId,jdbcType=VARCHAR}
+    </select>
+
+
+
+
+
+</mapper>

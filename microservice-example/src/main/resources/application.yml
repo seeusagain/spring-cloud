@@ -1,0 +1,77 @@
+server:
+  port: 8686
+  context-path: /microservice-example #  pom中的finalName
+  tomcat:
+      uri-encoding: UTF-8
+
+spring:
+  application:
+    name: microservice-example
+ #mysql
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+#redis
+  redis:
+    host: 10.83.36.115
+    port: 6379
+    password: Redis
+#jpa
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+#    自动建立表
+      ddl-auto: update
+  jackson:
+    serialization:
+      indent_output: true
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+#mybatis日志
+  level:
+    com:
+      java:
+        operation:
+          dao: debug
+
+#mybatis指向mapper的xml文件位置
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.java.example.entity.mybatis
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+#单个请求时长，默认是1000ms，太短
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 60000
+#配置并发条件下线程池,以便于熔断
+  threadpool:
+    default:
+      coreSize: 5

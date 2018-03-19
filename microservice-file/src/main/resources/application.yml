@@ -1,0 +1,56 @@
+server:
+  port: 8585
+  context-path: /microservice-file #  pom中的finalName
+  tomcat:
+      uri-encoding: UTF-8 #小心文件通过zuul上传乱码
+
+spring:
+  application:
+    name: microservice-file
+ #mysql
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+
+#文件上传最大限制MB
+  http:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+#redis
+  redis:
+    host: localhost
+    port: 6379
+    password: Redis
+#用户登录token保持时长（秒）.
+user:
+  token:
+    keep-time: 600
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+
+#文件配置
+file:
+  host: 10.83.36.115
+  port: 10022
+  user: user
+  password: password
+  rootDirectory: /home/weblogic/microservice-files/

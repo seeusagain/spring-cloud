@@ -1,0 +1,64 @@
+server:
+  port: 8484
+  context-path: /microservice-activiti #  pom中的finalName
+
+spring:
+  application:
+    name: microservice-activiti
+ #mysql
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+
+#redis
+  redis:
+    host: 10.83.36.115
+    port: 6379
+    password: Redis
+#jpa
+  jpa:
+    database: MYSQL
+    show-sql: true
+#    第一次运行开启，则会自动生成activiti的表
+#    hibernate:
+#      ddl-auto: update
+  jackson:
+    serialization:
+      indent_output: true
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microsoft-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+#mybatis日志
+  level:
+    com:
+      java:
+        activiti:
+          business:
+            dao: debug
+
+#close security
+security:
+  basic:
+    enabled: false
+
+##mybatis指向mapper的xml文件位置
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.java.activiti.business.entity.mybatis

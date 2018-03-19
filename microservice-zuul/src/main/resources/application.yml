@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  context-path: /microservice-zuul #  pom中的finalName
+
+spring:
+  application:
+    name: microservice-zuul
+#redis
+  redis:
+    host: 10.83.36.115
+    port: 6379
+    password: oamRedis
+
+#用户登录token保持时长（秒）.
+user:
+  token:
+    keep-time: 60000
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+
+#zuul会统一过滤会话(AccessSessionFilter),这里设置不过滤的地址，并且在拦截器中加以判断
+zuul:
+  sensitiveHeaders:
+  ignore:
+    url:
+      login: /authentication/login
+# 文件上传由于content-type 是multipart/form-data，无法从request中获取参数，故在组件内自行校验
+      fileUpload: /file/fileUpload
+
+#单个请求时长，默认是1000ms，太短
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 60000

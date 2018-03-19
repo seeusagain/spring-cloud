@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.activiti.business.dao.QueryApproveRecordsMapper">
+    <resultMap id="BaseResultMap" type="com.java.activiti.business.entity.mybatis.QueryApproveRecordsEntity">
+        <result column="task_id" jdbcType="VARCHAR" property="taskId"/>
+        <result column="task_name" jdbcType="VARCHAR" property="taskName"/>
+        <result column="create_user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="opinion" jdbcType="VARCHAR" property="opinion"/>
+        <result column="opinion_remarks" jdbcType="VARCHAR" property="opinionRemarks"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createDate"/>
+    </resultMap>
+
+
+    <select id="queryApproveRecords" parameterType="java.lang.String" resultMap="BaseResultMap">
+              SELECT cf.task_id,
+               cf.task_name,
+               cf.opinion,
+               cf.opinion_remarks,
+               (SELECT user_name
+                FROM user_info
+                WHERE user_id = cf.create_user)
+                  create_user_name,
+               cf.create_time
+        FROM csm_flow_approve_records cf
+             INNER JOIN act_hi_taskinst aht ON cf.task_id = aht.ID_
+        WHERE aht.PROC_INST_ID_ =#{processInstanceId,jdbcType=VARCHAR}
+        ORDER BY cf.create_time
+    </select>
+
+
+</mapper>

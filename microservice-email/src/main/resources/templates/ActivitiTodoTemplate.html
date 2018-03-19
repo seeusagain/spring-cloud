@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>email title</title>
+    <style>
+        .center {
+            text-align: center;
+        }
+
+        .span-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<span class="center">
+    <h3>系统提醒</h3>
+</span>
+
+<p class="center">您有一条待办事项需处理</p>
+<br/>
+<span class="center">
+    <p>
+       <span class="span-bold">流程名称：</span> <span th:text="${flowName}"></span>
+    </p>
+    <p>
+        <span class="span-bold">发起人：</span> <span th:text="${createUser}"></span>
+    </p>
+    <p>
+       <span class="span-bold">当前节点：</span> <span th:text="${currentNode}"></span>
+    </p>
+</span>
+
+<span class="center"><p>请登录系统查看：<a href="#"
+                                   th:href="@{www.baidu.com}">www.baidu.com</a></p></span>
+</body>
+</html>

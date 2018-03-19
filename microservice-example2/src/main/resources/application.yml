@@ -1,0 +1,31 @@
+server:
+  port: 8787
+  context-path: /microservice-example2 #  pom中的finalName
+  tomcat:
+      uri-encoding: UTF-8
+
+spring:
+  application:
+    name: microservice-example2
+  jackson:
+    serialization:
+      indent_output: true
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+
