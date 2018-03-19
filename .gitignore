@@ -1,0 +1,24 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+autopackage.bat
+common/common.iml
+common/target/
+microservice-activiti/microservice-activiti.iml
+microservice-activiti/target/
+microservice-basic/microservice-basic.iml
+microservice-basic/target/
+microservice-email/microservice-email.iml
+microservice-email/target/
+microservice-eureka/microservice-eureka.iml
+microservice-eureka/target/
+microservice-example/microservice-example.iml
+microservice-example/target/
+microservice-example2/microservice-example2.iml
+microservice-example2/target/
+microservice-file/microservice-file.iml
+microservice-file/target/
+microservice-zuul/microservice-zuul.iml
+microservice-zuul/target/
+spring-cloud-autopackage/
+spring-cloud.iml
+autopackage.bat
