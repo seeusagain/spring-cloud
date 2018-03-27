@@ -1,0 +1,53 @@
+server:
+  port: 8888
+  context-path: /microservice-exampleSharding #  pom中的finalName
+  tomcat:
+      uri-encoding: UTF-8
+
+spring:
+  application:
+    name: microservice-exampleSharding
+#jpa ,尤其是hbm2ddl、dialect在shardingjdbc中必须配置要不然报错
+  jpa:
+#    database: MYSQL
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  jackson:
+    serialization:
+      indent_output: true
+#加载sharding配置
+  profiles:
+    active: sharding
+
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+#mybatis日志
+  level:
+    com:
+      java:
+        operation:
+          dao: debug
+
+#mybatis指向mapper的xml文件位置
+#mybatis:
+#  mapper-locations: classpath:mybatis/mapper/*.xml
+#  type-aliases-package: com.java.exampleSharding.entity.mybatis

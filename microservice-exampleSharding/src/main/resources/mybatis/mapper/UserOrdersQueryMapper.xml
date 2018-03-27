@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.exampleSharding.dao.UserOrdersQueryMapper">
+    <resultMap id="BaseResultMap" type="com.java.exampleSharding.entity.mybatis.UserOrdersQuery">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="userId" jdbcType="VARCHAR" property="userId"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="orderPrice" jdbcType="INTEGER" property="orderPrice"/>
+        <result column="orderRemarks" jdbcType="orderRemarks" property="orderRemarks"/>
+    </resultMap>
+
+    <select id="queryList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT ui.id userId,
+        ui.name userName,
+        uo.price orderPrice,
+        uo.remarks orderRemarks
+        FROM user_info ui INNER JOIN user_orders uo ON ui.id = uo.user_id
+        <if test="remarks!='' and remarks != null">
+            AND uo.remarks LIKE concat('%', #{remarks,jdbcType=VARCHAR}),'%')
+        </if>
+    </select>
+
+
+</mapper>

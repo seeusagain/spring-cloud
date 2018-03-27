@@ -1,0 +1,41 @@
+sharding:
+  jdbc:
+    datasource:
+      names: ds_0,ds_1
+      ds_0:
+        type: org.apache.commons.dbcp.BasicDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/shardingtestdb
+        username: shardingTest
+        password: shardingTest
+      ds_1:
+        type: org.apache.commons.dbcp.BasicDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://10.83.24.5:3306/shardingtestdb
+        username: shardingTest
+        password: shardingTest
+    config:
+      sharding:
+        default-database-strategy: #默认的分库策略
+          inline:
+            sharding-column: user_id
+            algorithm-expression: ds_${user_id % 2}
+        tables: #各个表的配置
+          user_info: #userinfo表只指定分库策略
+            actual-data-nodes: ds_${0..1}.user_info
+          user_orders: #userorders使用分库策略的同时，使用分布式主键
+            actual-data-nodes: ds_${0..1}.user_orders
+            key-generator-column-name: order_id
+          goods_info: #goodsinfo使用自定义分库策略，不是用默认
+            actual-data-nodes: ds_${0..1}.goods_info
+            database-strategy:
+              inline:
+                sharding-column: goods_id
+                algorithm-expression: ds_${goods_id % 2}
+          goods_info_details: #goodsinfoDetail使用自定义分库策略，使用分布式主键
+            actual-data-nodes: ds_${0..1}.goods_info_details
+            database-strategy:
+              inline:
+                sharding-column: goods_id
+                algorithm-expression: ds_${goods_id % 2}
+            key-generator-column-name: id
