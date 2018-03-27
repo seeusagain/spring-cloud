@@ -40,6 +40,7 @@
         <module>microservice-eureka</module>
         <module>microservice-example</module>
         <module>microservice-example2</module>
+        <module>microservice-exampleSharding</module>
     </modules>
 
     <!--公共依赖,需要被子模块继承，需要写在dependencyManagement中-->
