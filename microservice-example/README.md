@@ -8,3 +8,4 @@ http://localhost:8686/microservice-example/swagger-ui.html
 - feign远程调用其他组件
 - 熔断测试
 - 降级测试
+- spring事务
