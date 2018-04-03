@@ -45,8 +45,10 @@ public class EmailSenderServiceImpl implements IEmailSenderService {
             logger.error(noticeMsg);
             return new ResultMsg(false, noticeMsg);
         }
-        if (EmptyUtils.isEmpty(mailSenderDto.getRecevers())) {
-            String noticeMsg = "接收人必填";
+        if ((mailSenderDto.getRecevers() == null || mailSenderDto.getRecevers().length == 0)
+                && (mailSenderDto.getCc() == null || mailSenderDto.getCc().length == 0)
+                && (mailSenderDto.getBcc() == null || mailSenderDto.getBcc().length == 0)) {
+            String noticeMsg = "接收人、抄送人、密送人必须存在";
             logger.error(noticeMsg);
             return new ResultMsg(false, noticeMsg);
         }
@@ -74,19 +76,25 @@ public class EmailSenderServiceImpl implements IEmailSenderService {
             return new ResultMsg(false, noticeMsg);
         }
         return this.send(mailSenderDto.getTitle(), mailSenderDto.getContent(), mailSenderDto
-            .getRecevers(), mailSenderDto.getCc(), mailSenderDto.getFiles());
+            .getRecevers(), mailSenderDto.getCc(),mailSenderDto.getBcc(), mailSenderDto.getFiles());
     }
     
-    private ResultMsg send(String title, String content, String[] recevers, String[] cc,
+    private ResultMsg send(String title, String content, String[] recevers, String[] cc,String[] Bcc,
         Map<String, InputStream> files) {
-        logger.info("邮件发送：title:{}\nrecevers:{}", title, Arrays.toString(recevers));
+        logger.info("邮件发送：title:{}\nrecevers:{}\ncc:{}\nbcc:{}", title, Arrays.toString(recevers), Arrays
+                .toString(cc), Arrays.toString(Bcc));
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             helper.setFrom(fromAddr);
-            helper.setTo(recevers);
-            if (EmptyUtils.isNotEmpty(cc)) {
+            if (recevers != null && recevers.length > 0) {
+                helper.setTo(recevers);
+            }
+            if (cc != null && cc.length > 0) {
                 helper.setCc(cc);
+            }
+            if (Bcc != null && Bcc.length > 0) {
+                helper.setBcc(Bcc);
             }
             helper.setSubject(title);
             helper.setText(content, true);

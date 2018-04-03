@@ -35,6 +35,11 @@ public class MailSenderDto implements Serializable {
     private String[] cc;
     
     /**
+     * 密送人
+     */
+    private String[] Bcc;
+    
+    /**
      * 附件
      * key fileName，记得加后缀名
      * value inputStream，文件流
@@ -89,13 +94,22 @@ public class MailSenderDto implements Serializable {
         this.files = files;
     }
     
+    public String[] getBcc() {
+        return Bcc;
+    }
+    
+    public void setBcc(String[] bcc) {
+        Bcc = bcc;
+    }
+    
     public MailSenderDto(String title, String content, MailSenderTemplateDto template, String[] recevers, String[] cc,
-        Map<String, InputStream> files) {
+        String[] bcc, Map<String, InputStream> files) {
         this.title = title;
         this.content = content;
         this.template = template;
         this.recevers = recevers;
         this.cc = cc;
+        Bcc = bcc;
         this.files = files;
     }
     
