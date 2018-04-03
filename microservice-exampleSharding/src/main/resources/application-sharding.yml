@@ -16,6 +16,7 @@ sharding:
         password: shardingTest
     config:
       sharding:
+        default-data-source-name: ds_0 #默认数据库
         default-database-strategy: #默认的分库策略
           inline:
             sharding-column: user_id

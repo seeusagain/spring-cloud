@@ -5,43 +5,63 @@ package com.java.exampleSharding.entity.mybatis;
  * TODO:
  */
 public class UserOrdersQuery {
-    private String userId;
+    private long userId;
     
-    private String userName;
+    private String name;
     
-    private int orderPrice;
+    private String age;
     
-    private String orderRemarks;
+    private long orderId;
     
-    public String getUserId() {
+    private int price;
+    
+    private String remarks;
+    
+    public long getUserId() {
         return userId;
     }
     
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
     
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
     
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public int getOrderPrice() {
-        return orderPrice;
+    public String getAge() {
+        return age;
     }
     
-    public void setOrderPrice(int orderPrice) {
-        this.orderPrice = orderPrice;
+    public void setAge(String age) {
+        this.age = age;
     }
     
-    public String getOrderRemarks() {
-        return orderRemarks;
+    public long getOrderId() {
+        return orderId;
     }
     
-    public void setOrderRemarks(String orderRemarks) {
-        this.orderRemarks = orderRemarks;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
+    }
+    
+    public int getPrice() {
+        return price;
+    }
+    
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    
+    public String getRemarks() {
+        return remarks;
+    }
+    
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

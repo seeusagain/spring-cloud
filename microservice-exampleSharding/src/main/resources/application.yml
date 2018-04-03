@@ -44,10 +44,8 @@ logging:
   level:
     com:
       java:
-        operation:
+        exampleSharding:
           dao: debug
-
-#mybatis指向mapper的xml文件位置
-#mybatis:
-#  mapper-locations: classpath:mybatis/mapper/*.xml
-#  type-aliases-package: com.java.exampleSharding.entity.mybatis
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.java.exampleSharding.entity.mybatis

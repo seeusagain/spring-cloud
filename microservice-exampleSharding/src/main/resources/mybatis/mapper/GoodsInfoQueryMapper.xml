@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.exampleSharding.dao.GoodsInfoQueryMapper">
+    <resultMap id="BaseResultMap" type="com.java.exampleSharding.entity.mybatis.GoodsInfoQuery">
+        <result column="goodsId" jdbcType="BIGINT" property="goodsId"/>
+        <result column="goodsDetailId" jdbcType="BIGINT" property="goodsDetailId"/>
+        <result column="goodsName" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="price" jdbcType="INTEGER" property="price"/>
+    </resultMap>
+
+    <select id="queryGoodsList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT gi.goods_id goodsId,
+        gid.id goodsDetailId,
+        gi.name goodsName,
+        gid.price price
+        FROM goods_info gi
+        LEFT JOIN goods_info_details gid ON gi.goods_id = gid.goods_id
+        WHERE 1=1
+        <if test="goodsId!='' and goodsId != null and goodsId>0">
+            AND gi.goods_id = #{goodsId,jdbcType=VARCHAR}
+        </if>
+        <if test="goodsName!='' and goodsName != null">
+            AND gi.name LIKE concat('%', #{goodsName,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+
+    <select id="queryGoodsForPage" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT gi.goods_id goodsId,
+        gid.id goodsDetailId,
+        gi.name goodsName,
+        gid.price price
+        FROM goods_info gi
+        LEFT JOIN goods_info_details gid ON gi.goods_id = gid.goods_id
+        WHERE 1=1
+        limit 0,10
+    </select>
+
+    <select id="queryGoodsOrderByForPage" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT gi.goods_id goodsId,
+        gid.id goodsDetailId,
+        gi.name goodsName,
+        gid.price price
+        FROM goods_info gi
+        LEFT JOIN goods_info_details gid ON gi.goods_id = gid.goods_id
+        WHERE 1=1
+        order by gi.goods_id
+        limit 0,10
+    </select>
+
+
+</mapper>

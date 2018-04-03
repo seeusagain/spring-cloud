@@ -1,3 +1,4 @@
+-- 分库测试数据库表创建脚本
 drop table  if exists goods_info;
 drop table  if exists goods_info_details;
 drop table  if exists user_info;

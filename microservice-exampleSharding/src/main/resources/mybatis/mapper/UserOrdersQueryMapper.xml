@@ -2,21 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.java.exampleSharding.dao.UserOrdersQueryMapper">
     <resultMap id="BaseResultMap" type="com.java.exampleSharding.entity.mybatis.UserOrdersQuery">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="userId" jdbcType="VARCHAR" property="userId"/>
-        <result column="userName" jdbcType="VARCHAR" property="userName"/>
-        <result column="orderPrice" jdbcType="INTEGER" property="orderPrice"/>
-        <result column="orderRemarks" jdbcType="orderRemarks" property="orderRemarks"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId" />
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="VARCHAR" property="age"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="price" jdbcType="INTEGER" property="price"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
     </resultMap>
 
     <select id="queryList" parameterType="java.lang.String" resultMap="BaseResultMap">
-        SELECT ui.id userId,
-        ui.name userName,
-        uo.price orderPrice,
-        uo.remarks orderRemarks
-        FROM user_info ui INNER JOIN user_orders uo ON ui.id = uo.user_id
+
+        SELECT ui.user_id,
+        ui.name,
+        ui.age,
+        uo.order_id,
+        uo.price,
+        uo.remarks
+        FROM user_info ui LEFT JOIN user_orders uo ON ui.user_id = uo.user_id
+        WHERE 1=1
         <if test="remarks!='' and remarks != null">
-            AND uo.remarks LIKE concat('%', #{remarks,jdbcType=VARCHAR}),'%')
+            AND uo.remarks LIKE concat('%', #{remarks,jdbcType=VARCHAR},'%')
         </if>
     </select>
 
