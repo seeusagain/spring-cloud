@@ -25,14 +25,14 @@ spring-cloud示例
 - exampleSharding  
 数据库分片测试  
 
-## WAR包说明
-spring boot 可以使用jar包运行，系统中maven打包默认是打jar  
+## 如果需要打WAR包:
+spring boot 可以使用jar包运行，系统中maven打包默认是打jar；  
 同时系统中配置了war包打包方式，如需打war包请按照以下步骤修改：
 
 这里以microservice-eureka为例讲述  
 -  修改程序启动类：ApplicationEureka.java  
 将以下代码注释
-```
+```java
 public class ApplicationEureka {
     public static void main(String[] args) {
         SpringApplication.run(ApplicationEureka.class, args);
@@ -40,7 +40,7 @@ public class ApplicationEureka {
 }
 ```
 开启以代码注释
-```
+```java
 /**
  * 不使用内置tomcat运行（war包运行），需SpringBootServletInitializer加载
  */
@@ -66,7 +66,7 @@ public class ApplicationEureka {
 <packaging>war</packaging>
 ```
 开启以下注释，告诉maven打war包时排除tomcat相关包
-``` 
+```
 <!-- jar运行情况下注释，这里指定打war包的时候不再需要tomcat相关的包 -->
 <!--<dependency>-->
 <!--<groupId>org.springframework.boot</groupId>-->
@@ -75,7 +75,7 @@ public class ApplicationEureka {
 <!--</dependency>-->
 ```
 开启以下注释，告诉maven打war包的时候告诉maven不需要web.xml
-``` 
+```
 <!-- war包开启，maven打war包的时候告诉maven不需要web.xml,否刚会报找不到web.xml错误 -->
 <!--<plugin>-->
 <!--<groupId>org.apache.maven.plugins</groupId>-->
