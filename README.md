@@ -60,13 +60,13 @@ public class ApplicationEureka extends SpringBootServletInitializer {
 ```
 - 修改pom.xml  
 修改打包方式
-```java
+```
 <packaging>jar</packaging>
 改为
 <packaging>war</packaging>
 ```
 开启以下注释，告诉maven打war包时排除tomcat相关包
-```java
+```
 <!-- jar运行情况下注释，这里指定打war包的时候不再需要tomcat相关的包 -->
 <!--<dependency>-->
 <!--<groupId>org.springframework.boot</groupId>-->
@@ -75,7 +75,7 @@ public class ApplicationEureka extends SpringBootServletInitializer {
 <!--</dependency>-->
 ```
 开启以下注释，告诉maven打war包的时候告诉maven不需要web.xml
-```java
+```
 <!-- war包开启，maven打war包的时候告诉maven不需要web.xml,否刚会报找不到web.xml错误 -->
 <!--<plugin>-->
 <!--<groupId>org.apache.maven.plugins</groupId>-->
