@@ -1,0 +1,47 @@
+server:
+  port: 8888
+  context-path: /microservice-dynamicDataSource
+
+spring:
+  application:
+    name: microservice-dynamicDataSource
+#default-dataSource
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+#other-dataSources
+  profiles:
+    active: dataSources
+#jpa
+  jpa:
+    database: MYSQL
+    show-sql: true
+#eureka
+eureka:
+  instance:
+    hostname: localhost
+    port: 8181
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    lease-renewal-interval-in-seconds: 10 #续约更新频率，默认是30s
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/microservice-eureka/eureka/
+    registry-fetch-interval-seconds: 10 #拉取服务注册时间，默认60，改小实现发布后尽快访问
+#log
+logging:
+  config: classpath:logback-spring.xml
+#mybatis-log-level
+  level:
+     com:
+        java:
+          dynamicDataSource:
+             dao: debug
+#mybatis-mappers-locations
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.java.dynamicDataSource.entity.mybatis

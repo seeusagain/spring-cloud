@@ -1,0 +1,8 @@
+#安硕库
+spring:
+  datasource:
+      oracle_ds:
+        driverClassName: oracle.jdbc.driver.OracleDriver
+        url: jdbc:oracle:thin:@10.83.24.2:1521:test_uat
+        username: uatCXF
+        password: OMYWrXOJRRMC

@@ -35,7 +35,7 @@ com.java.dynamicDataSource.service.dynamicDataSource
 ```
 由于系统使用了枚举，所以这里的@Bean中的名称，要和DataSourceEnums.java中的保持一致，以免切换数据源的时候匹配不上。  
 <br/>  
-**定义动态数据源**  
+**定义动态数据源**    
 指定动态数据源的可选数据源列表，和默认数据源  
 ```java
     @Bean("dynamicDataSource")
@@ -75,16 +75,46 @@ com.java.dynamicDataSource.service.dynamicDataSource
 ```    
 - 动态数据源+ThreadLocal  
 DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSourceHolder 数据源使用的ThreadLocal.java也就是threadLocal中获取的  
-<h4 style="color:red">其实写到这里，已经满足了手动切换数据源，使用方法：</h4>
-```java
- 业务代码...
+**其实写到这里，已经满足了手动切换数据源，使用方法：**
+```java  
+ 业务代码... 
  DynamicDataSourceHolder.setDataSource(DataSourceEnums.ORACLEDATASOURCE_KEY.getCode());
  业务代码...
 ```   
 
 ### 使用注解自动切换数据源  
-
+- 自定义注解DataSource.java
+- 加入AOP方法：DataSource.java  
+使用方法：在类或者方法上，加入@DataSource("datasourceName")注解即可  
+注解优先级：方法>类  
 ****
 ## 使用方法
+- 拷贝dynamicDataSource文件夹内文件至项目
+- application中定义数据源
+- 修改DataSourceConfiguration.java 中数据源配置
+- 修改DataSourceEnums.java 中数据源枚举
+- 业务代码中使用有两种方式
+手动切换： DynamicDataSourceHolder.setDataSource(DataSourceEnums.ORACLEDATASOURCE_KEY.getCode());  
+注解切换：@DataSource("datasourceName")
 
 ## 注意事项
+由于spring不建议AOP拦截方法内调用的方法，所以在使用注解时候这样写是无效的
+```java  
+    public void changeDataSource(){
+        //使用默认数据源
+        List<MysqlQueryEntity> mysqlQueryEntities = this.mysqlQueryMapper.queryList();
+        this.changeDataSourceToOracle();
+    }
+    
+    @DataSource("oracleDatasource")
+    public void changeDataSourceToOracle() {
+        //使用Oracle数据源
+        List<OracleQueryEntity> oracleQueryEntities = this.oracleQueryMapper.queryList();
+    }.
+```   
+遇到这样的需求，建议使用手动切换数据源方法  
+
+## 测试代码
+swagger: http://10.83.14.187:8888/microservice-dynamicDataSource/swagger-ui.html  
+java: IDynamicTestService.java  
+
