@@ -60,16 +60,5 @@ public class DynamicTestServiceImpl implements IDynamicTestService {
         List<OracleQueryEntity> oracleQueryEntities = this.oracleQueryMapper.queryList();
         return new ResultMsg(true, "请查看执行log");
     }
-
-    public void changeDataSource(){
-        //使用默认数据源
-        List<MysqlQueryEntity> mysqlQueryEntities = this.mysqlQueryMapper.queryList();
-        this.changeDataSourceToOracle();
-    }
-    @DataSource("oracleDatasource")
-    public void changeDataSourceToOracle() {
-        //使用Oracle数据源
-        List<OracleQueryEntity> oracleQueryEntities = this.oracleQueryMapper.queryList();
-    }
-
+    
 }

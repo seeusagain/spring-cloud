@@ -4,14 +4,14 @@
 com.java.dynamicDataSource.service.dynamicDataSource
 ```  
 通过重写mybatis的SqlSessionFactoryBean，使mybatis数据源来源为我们自定义的动态数据源；  
-动态数据源方法中，使用threadlocal技术保存线程数据源，通过get方法获取线程数据源key，并提供put方法更改数据源key，以达到切换数据源目的。
+动态数据源方法中，使用threadlocal技术保存线程数据源，通过get方法获取线程数据源key，并提供put方法更改数据源key，以达到切换数据源目的。  
 系统中同时提供根据注解自动切换数据源方法，使用的是自定义注解+springAOP方式，拦截带有数据源标记的注解，通过AOP自动切换。  
-- DataSourceConfiguration 配置数据源核心代码
-- DynamicDataSource 动态数据源
-- DynamicDataSourceHolder 数据源使用的ThreadLocal
-- DataSource 自动切换_数据源注解
-- DataSourceAOP 自动切换_AOP拦截器
-- DataSourceEnums 数据源枚举类  
+- DataSourceConfiguration.java 配置数据源核心代码
+- DynamicDataSource.java 动态数据源
+- DynamicDataSourceHolder.java 数据源使用的ThreadLocal
+- DataSource.java 自动切换_数据源注解
+- DataSourceAOP.java 自动切换_AOP拦截器
+- DataSourceEnums.java 数据源枚举类  
 ---
 ## 核心代码详解
 ### 手动切换数据源实现
@@ -74,7 +74,8 @@ com.java.dynamicDataSource.service.dynamicDataSource
     }
 ```    
 - 动态数据源+ThreadLocal  
-DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSourceHolder 数据源使用的ThreadLocal.java也就是threadLocal中获取的  
+DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSourceHolder.java中ThreadLocal中获取的。  
+同时DynamicDataSourceHolder.java提供put方法更改当前线程的数据源。    
 **其实写到这里，已经满足了手动切换数据源，使用方法：**
 ```java  
  业务代码... 
@@ -89,10 +90,11 @@ DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSo
 注解优先级：方法>类  
 ****
 ## 使用方法
-- 拷贝dynamicDataSource文件夹内文件至项目
+- 拷贝service层中的dynamicDataSource文件夹内文件至项目
 - application中定义数据源
 - 修改DataSourceConfiguration.java 中数据源配置
 - 修改DataSourceEnums.java 中数据源枚举
+- 修改AOP拦截切面包名  
 - 业务代码中使用有两种方式
 手动切换： DynamicDataSourceHolder.setDataSource(DataSourceEnums.ORACLEDATASOURCE_KEY.getCode());  
 注解切换：@DataSource("datasourceName")
