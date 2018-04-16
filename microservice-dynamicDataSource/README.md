@@ -15,7 +15,7 @@ com.java.dynamicDataSource.service.dynamicDataSource
 ---
 ## 核心代码详解
 - DataSourceConfiguration.java   
- *定义数据源*  
+**定义数据源**   
 @ConfigurationProperties写配置文件中前缀即可
 配置文件：application.yml、application-dataSources.yml
 ```java
@@ -32,9 +32,26 @@ com.java.dynamicDataSource.service.dynamicDataSource
         return DataSourceBuilder.create().build();
     }
 ```
-
-
-    
+由于系统使用了枚举，所以这里的@Bean中的名称，要和DataSourceEnums.java中的保持一致，以免切换数据源的时候匹配不上。  
+<br/>  
+**定义动态数据源**
+指定动态数据源的可选数据源列表，和默认数据源  
+```java
+@Bean("dynamicDataSource")
+public DataSource dynamicDataSource() {
+       DynamicDataSource dynamicRoutingDataSource = new DynamicDataSource();
+       Map<Object, Object> dataSourceMap = new HashMap<>(4);
+       //可选数据源列表
+       dataSourceMap.put(DataSourceEnums.DEFAULT_DATASOURCE_KEY.getCode(), defaultDatasource());
+       dataSourceMap.put(DataSourceEnums.ORACLEDATASOURCE_KEY.getCode(), oracleDatasource());
+       //默认数据源
+       dynamicRoutingDataSource.setDefaultTargetDataSource(defaultDatasource());
+       dynamicRoutingDataSource.setTargetDataSources(dataSourceMap);
+       return dynamicRoutingDataSource;
+   }
+```  
+<br/>    
+**啊**   
 
 ## 使用方法
 
