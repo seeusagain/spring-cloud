@@ -28,3 +28,5 @@ microservice-dynamicDataSource/microservice-dynamicDataSource.iml
 microservice-example/src/main/java/com/java/example/entity/mybatis/
 autoRun.bat
 microservice-dynamicDataSource/target/
+microservice-easyUi/target/
+microservice-easyUi/microservice-easyUi.iml
