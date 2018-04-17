@@ -22,3 +22,9 @@ microservice-zuul/target/
 spring-cloud-autopackage/
 spring-cloud.iml
 autopackage.bat
+microservice-exampleSharding/microservice-exampleSharding.iml
+microservice-exampleSharding/target/
+microservice-dynamicDataSource/microservice-dynamicDataSource.iml
+microservice-example/src/main/java/com/java/example/entity/mybatis/
+autoRun.bat
+microservice-dynamicDataSource/target/
