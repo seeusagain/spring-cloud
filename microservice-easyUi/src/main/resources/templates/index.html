@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>DEMO </title>
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="center">
+<span>
+    <h3> easyUi 服务主页</h3></span>
+<br/>
+<a th:href="@{{path}/demoPage(path=${contextPath})}" target="_blank">测试界面</a>
+<br/>
+
+<img th:src="@{/image/logo.png}" style="margin-top: 100px; height: 200px;"/>
+</body>
+</html>

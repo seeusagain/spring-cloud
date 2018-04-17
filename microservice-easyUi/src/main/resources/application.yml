@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  context-path: /microservice-easyUi
+
+spring:
+  application:
+    name: microservice-easyUi
+#log
+logging:
+  config: classpath:logback-spring.xml
