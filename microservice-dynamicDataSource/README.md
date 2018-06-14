@@ -114,8 +114,8 @@ DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSo
         List<OracleQueryEntity> oracleQueryEntities = this.oracleQueryMapper.queryList();
     }.
 ```   
-- spring 定时任务中，jpa保存无效，可以使用mybatis   
 遇到这样的需求，建议使用手动切换数据源方法  
+- spring 定时任务中，jpa保存无效，可以使用mybatis   
 
 ## 测试代码
 swagger: http://10.83.14.187:8888/microservice-dynamicDataSource/swagger-ui.html  
