@@ -100,7 +100,7 @@ DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSo
 注解切换：@DataSource("datasourceName")
 
 ## 注意事项
-由于spring不建议AOP拦截方法内调用的方法，所以在使用注解时候这样写是无效的
+- 由于spring不建议AOP拦截方法内调用的方法，所以在使用注解时候这样写是无效的
 ```java  
     public void changeDataSource(){
         //使用默认数据源
@@ -114,6 +114,7 @@ DynamicDataSource.java作为动态数据源，返回数据源是从DynamicDataSo
         List<OracleQueryEntity> oracleQueryEntities = this.oracleQueryMapper.queryList();
     }.
 ```   
+- spring 定时任务中，jpa保存无效，可以使用mybatis   
 遇到这样的需求，建议使用手动切换数据源方法  
 
 ## 测试代码
