@@ -1,0 +1,11 @@
+server:
+  port: 8888
+  context-path: /microservice-sessionIntercepter
+
+spring:
+  application:
+    name: microservice-sessionIntercepter
+
+#log
+logging:
+  config: classpath:logback-spring.xml

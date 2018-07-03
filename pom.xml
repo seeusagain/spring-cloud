@@ -43,6 +43,7 @@
         <module>microservice-exampleSharding</module>
         <module>microservice-dynamicDataSource</module>
         <module>microservice-easyUi</module>
+        <module>microservice-sessionIntercepter</module>
     </modules>
 
     <!--公共依赖,需要被子模块继承，需要写在dependencyManagement中-->
