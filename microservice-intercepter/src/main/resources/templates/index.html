@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>主页 </title>
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="center">
+<span>
+    <h3> 服务主页</h3>
+</span>
+<div style="display:inline-block; height: 10%;">
+    <p style="display:inline-block;" th:text="'当前访问用户：'+${session.USER_NAME_SESSION_KEY}"></p>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a style="display:inline-block;" href="authentication/logout">注销</a>
+</div>
+<hr/>
+<div style="height: 90%">
+    <h3> 测试:</h3>
+    <a href="businessEmail/listPage" target="_blank">获取用户信息</a>
+</div>
+</body>
+</html>

@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class ApplicationInterceptor {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ApplicationInterceptor.class, args);
     }
 }
 
@@ -14,14 +14,14 @@ public class Application {
  * 不使用内置tomcat运行，需SpringBootServletInitializer加载
  */
 //public class Application extends SpringBootServletInitializer {
-//    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+//    private static final Logger logger = LoggerFactory.getLogger(ApplicationInterceptor.class);
 //
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-//        return application.sources(Application.class);
+//        return application.sources(ApplicationInterceptor.class);
 //    }
 //
 //    public static void main(String[] args) {
-//        SpringApplication.run(Application.class, args);
+//        SpringApplication.run(ApplicationInterceptor.class, args);
 //    }
 //}

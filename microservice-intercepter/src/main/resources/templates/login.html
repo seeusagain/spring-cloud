@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <link rel="stylesheet" type="text/css"
+          th:href="@{{path}/webjars/jquery-easyui/1.5.2/css/easyui.css(path=${contextPath})}"/>
+
+    <script type="application/javascript"
+            th:src="@{{path}/webjars/jquery/1.12.2/jquery.min.js(path=${contextPath})}"></script>
+    <script type="application/javascript"
+            th:src="@{{path}/webjars/jquery-easyui/1.5.2/js/jquery.easyui.min.js(path=${contextPath})}"></script>
+    <script type="application/javascript"
+            th:src="@{{path}/webjars/jquery-easyui/1.5.2/locale/easyui-lang-zh_CN.js(path=${contextPath})}"></script>
+
+
+    <title>登录</title>
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="center">
+<span>
+    <h3> 系统登录</h3>
+</span>
+<br/>
+<form id="loginForm">
+    <table align="center">
+        <tr>
+            <td>用户名</td>
+            <td><input name="userId" id="userId" autofocus="autofocus"/></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input name="userPwd" id="userPwd" type="password" onkeydown=""/></td>
+        </tr>
+        <tr id="loginButton">
+            <td></td>
+            <td>
+                <input type="button" value="登录" onclick="doLogin();"/>
+                <input type="reset" value="重置"/>
+            </td>
+        </tr>
+        <tr id="chromeNotice" hidden="hidden">
+            <td colspan="2" align="center" style="background-color: red"> 请使用chrome浏览器登录</td>
+        </tr>
+    </table>
+</form>
+
+</body>
+
+
+<script th:inline="javascript">
+    contextPath = /*[[@{/}]]*/ '';
+
+    window.onload = function () {
+        var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+        if (!isChrome) {
+            $("#chromeNotice").removeAttr("hidden");
+            $("#loginButton").remove();
+        }
+    }
+
+    $("#userId").keydown(function () {
+        if (window.event.keyCode == 13) {
+            $('#userPwd').focus();
+        }
+    });
+
+    $("#userPwd").keydown(function () {
+        if (window.event.keyCode == 13) {
+            doLogin();
+        }
+    });
+
+    function doLogin() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: contextPath + "/authentication/login",
+            data: $('#loginForm').serialize(),
+            success: function (data) {
+                if (data.success == true) {
+                    location.href = contextPath;
+                } else {
+                    alert(data.msg);
+                }
+            },
+            error: function (data) {
+                alert("系统异常，建议您使用chrome浏览器进行操作");
+            }
+        });
+    }
+</script>
+</html>

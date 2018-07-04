@@ -1,10 +1,10 @@
 server:
   port: 8888
-  context-path: /microservice-sessionIntercepter
+  context-path: /microservice-intercepter
 
 spring:
   application:
-    name: microservice-sessionIntercepter
+    name: microservice-intercepter
 
 #log
 logging:

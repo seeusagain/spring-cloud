@@ -9,9 +9,9 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>microservice-sessionIntercepter</artifactId>
+    <artifactId>microservice-intercepter</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>microservice-sessionIntercepter</name>
+    <name>microservice-intercepter</name>
     <description>会话拦截器测试</description>
     <packaging>jar</packaging>
     <!--<packaging>war</packaging>-->
@@ -24,7 +24,6 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
         <!--测试模块-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,6 +34,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- spring AOP -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
         <!--swagger ui-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -43,6 +47,12 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <!--jquery-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>1.12.2</version>
         </dependency>
 
 
@@ -56,7 +66,7 @@
     </dependencies>
 
     <build>
-        <finalName>microservice-sessionIntercepter</finalName>
+        <finalName>microservice-intercepter</finalName>
         <plugins>
             <!--打包即生成jar-->
             <plugin>
