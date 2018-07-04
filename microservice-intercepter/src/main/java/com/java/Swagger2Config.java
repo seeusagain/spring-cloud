@@ -48,7 +48,7 @@ public class Swagger2Config {
         //            .build();
         //        pars.add(tokenPar.build());
         return new Docket(DocumentationType.SWAGGER_2).select()
-            .apis(RequestHandlerSelectors.basePackage("com.java.sessionIntercepter"))
+            .apis(RequestHandlerSelectors.basePackage("com.java.test"))
             .paths(PathSelectors.any())
             .build()
             //            .globalOperationParameters(pars)

@@ -2,6 +2,7 @@ package com.java.test.ctrl;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.java.constants.AuthenticationConstats;
 import com.java.dto.LogonUser;
@@ -11,9 +12,7 @@ import com.java.test.service.IAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.java.dto.ResultMsg;
@@ -60,5 +59,11 @@ public class AuthenticationController {
     public ModelAndView logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return new ModelAndView("login");
+    }
+    
+    @ApiOperation(value = "系统主页", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/")
+    public ModelAndView defaultRequest() {
+        return new ModelAndView("index");
     }
 }

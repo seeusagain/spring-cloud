@@ -8,4 +8,13 @@
     其目的是:可以在service层直接获取线程中的登录用户信息，而不是依靠controller传递  
 - 自定义spring AOP拦截访问，校验参数  
     基于上面的threadLocal存储信息，自定义了注解@Authentication  
-    使用AOP拦截注解，校验访问线程是否存储了相关信息，相当于是threadLocal的内部校验机制
+    使用AOP拦截注解，校验访问线程是否存储了相关信息，相当于是上面的threadLocal的内部校验机制  
+    
+## 测试  
+- 主页  
+    http://localhost:8888/microservice-intercepter/  
+    首次访问会拦截，并跳转至登录界面  
+    登录后可以在主页中进行业务测试，获取线程中的用户信息  
+     
+    
+    
