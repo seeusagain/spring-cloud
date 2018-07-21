@@ -1,15 +1,11 @@
 package com.java.utils.encrypt;
 
-import javax.crypto.BadPaddingException;
+import java.security.SecureRandom;
+
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * TODO(AES加、解密)    .
@@ -20,134 +16,170 @@ import java.security.SecureRandom;
  * @date: 2016年4月18日 下午1:35:01
  */
 public class AESEncription {
-
+    
     /**
-     * The Constant keyword.
+     * 自定义密钥
      */
-    public static final String keyword = "butterFly"; //自定义密钥
-
+    public static final String SECRET_KEY = "MMT_OAM_AES_SECRET_KEY";
+    
     /**
-     * TODO(生成加密密钥)
-     *
-     * @return SecretKey 返回值
-     * @author 许路
-     * @Title: getSecretKey
-     */
-    public static SecretKey getSecretKey() {
-        try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES"); //获取密钥生成器
-            SecureRandom srd = SecureRandom.getInstance("SHA1PRNG"); //获取强加密随机数生成器
-            srd.setSeed(keyword.getBytes()); //根据自定义密码重新设置随机对象的种子
-            kgen.init(128, srd);
-            return kgen.generateKey();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * TODO(加密 )    .
-     *
-     * @param content 需要加密的内容
-     * @return String
-     * String 返回值
-     * @author 许路
-     * @Title: encrypt
+     * TODO：加密（使用默认秘钥）
+     * @param content
+     * @return
+     * @throws Exception
      */
     public static String encrypt(String content) throws Exception {
-        SecretKey secretKey = getSecretKey();
+        return encrypt(content, SECRET_KEY);
+    }
+    
+    /**
+     * TODO：加密（使用自定义秘钥）
+     * @param content
+     * @param secretKey
+     * @return
+     * @throws Exception
+     */
+    public static String encryptWithKey(String content, String secretKey) throws Exception {
+        return encrypt(content, secretKey);
+    }
+    
+    private static String encrypt(String content, String secretKeyStr) throws Exception {
+        SecretKey secretKey = getSecretKey(secretKeyStr);
         byte[] enCodeFormat = secretKey.getEncoded();
         SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-        Cipher cipher = Cipher.getInstance("AES"); // 创建密码器
+        // 创建密码器
+        Cipher cipher = Cipher.getInstance("AES");
         byte[] byteContent = content.getBytes("GBK");
-        cipher.init(Cipher.ENCRYPT_MODE, key); // 初始化
-        byte[] result = cipher.doFinal(byteContent); // 加密
-        String encryptResultStr = parseByte2HexStr(result); //二进制转16进制
-        return encryptResultStr;
+        // 初始化
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        // 加密
+        byte[] result = cipher.doFinal(byteContent);
+        //二进制转16进制
+        return parseByte2HexStr(result);
     }
-
+    
     /**
-     * TODO(解密 )    .
-     *
-     * @param content the content
-     * @return String
-     * String 返回值
-     * @author 许路
-     * @Title: decrypt
+     * TODO:解密（使用默认秘钥）
+     * @param content
+     * @return
+     * @throws Exception
      */
-    public static String decrypt(String content) {
+    public static String decrypt(String content) throws Exception {
+        return decrypt(content, SECRET_KEY);
+    }
+    
+    /**
+     * TODO:解密（使用自定义秘钥）
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static String decryptWithKey(String content, String secretKey) throws Exception {
+        return decrypt(content, secretKey);
+    }
+    
+    private static String decrypt(String content, String secretKeyStr) throws Exception {
         try {
-            byte[] decryptFrom = parseHexStr2Byte(content); //16进制转2进制
-            SecretKey secretKey = getSecretKey();
+            SecretKey secretKey = getSecretKey(secretKeyStr);
             byte[] enCodeFormat = secretKey.getEncoded();
+            //16进制转2进制
+            byte[] decryptFrom = parseHexStr2Byte(content);
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES"); // 创建密码器
-            cipher.init(Cipher.DECRYPT_MODE, key); // 初始化
+            // 创建密码器
+            Cipher cipher = Cipher.getInstance("AES");
+            // 初始化
+            cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] result = cipher.doFinal(decryptFrom);
-            return new String(result); // 加密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+            // 解密
+            return new String(result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
+    
     /**
-     * TODO(文件加密)    .
-     *
-     * @param content the content
-     * @return byte[]
-     * byte[] 返回值
-     * @author 许路
-     * @Title: encryptFile
+     * TODO:加密文件（使用默认秘钥）
+     * @param content
+     * @return
+     * @throws Exception
      */
-    public static byte[] encryptFile(byte[] content) {
-        try {
-            SecretKey secretKey = getSecretKey();
-            byte[] enCodeFormat = secretKey.getEncoded();
-            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES"); // 创建密码器
-            cipher.init(Cipher.ENCRYPT_MODE, key); // 初始化
-            byte[] result = cipher.doFinal(content); // 加密
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static byte[] encryptFile(byte[] content) throws Exception {
+        return encryptFile(content, SECRET_KEY);
     }
-
+    
     /**
-     * TODO(文件解密)    .
-     *
-     * @param content the content
-     * @return byte[]
-     * byte[] 返回值
-     * @author 许路
-     * @Title: decryptFile
+     * TODO:加密文件（使用自定义秘钥）
+     * @param content
+     * @return
+     * @throws Exception
      */
-    public static byte[] decryptFile(byte[] content) {
-        try {
-            SecretKey secretKey = getSecretKey();
-            byte[] enCodeFormat = secretKey.getEncoded();
-            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES"); // 创建密码器
-            cipher.init(Cipher.DECRYPT_MODE, key); // 初始化
-            byte[] result = cipher.doFinal(content);
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static byte[] encryptFileWithKey(byte[] content, String secretKey) throws Exception {
+        return encryptFile(content, secretKey);
     }
-
+    
+    private static byte[] encryptFile(byte[] content, String secretKeyStr) throws Exception {
+        SecretKey secretKey = getSecretKey(secretKeyStr);
+        byte[] enCodeFormat = secretKey.getEncoded();
+        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+        // 创建密码器
+        Cipher cipher = Cipher.getInstance("AES");
+        // 初始化
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        // 加密
+        return cipher.doFinal(content);
+    }
+    
+    /**
+     * TODO:解密文件（使用默认秘钥）
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static byte[] decryptFile(byte[] content) throws Exception {
+        return encryptFile(content, SECRET_KEY);
+    }
+    
+    /**
+     * TODO:解密文件（使用自定义秘钥）
+     * @param content
+     * @return
+     * @throws Exception
+     */
+    public static byte[] decryptFileWithKey(byte[] content, String secretKey) throws Exception {
+        return encryptFile(content, secretKey);
+    }
+    
+    private static byte[] decryptFile(byte[] content, String secretKeyStr) throws Exception {
+        SecretKey secretKey = getSecretKey(secretKeyStr);
+        byte[] enCodeFormat = secretKey.getEncoded();
+        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+        // 创建密码器
+        Cipher cipher = Cipher.getInstance("AES");
+        // 初始化
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        return cipher.doFinal(content);
+    }
+    
+    /**
+     * 获取秘钥
+     * @param secretKey
+     * @return
+     */
+    public static SecretKey getSecretKey(String secretKey) throws Exception {
+        if (null == secretKey || "".equals(secretKey)) {
+            throw new RuntimeException(" secretKey can not be null...");
+        }
+        //获取密钥生成器
+        KeyGenerator kgen = KeyGenerator.getInstance("AES");
+        //获取强加密随机数生成器
+        SecureRandom srd = SecureRandom.getInstance("SHA1PRNG");
+        //根据自定义密码重新设置随机对象的种子
+        srd.setSeed(secretKey.getBytes());
+        kgen.init(128, srd);
+        return kgen.generateKey();
+    }
+    
     /**
      * TODO(将二进制转换成16进制)    .
      *
@@ -168,7 +200,7 @@ public class AESEncription {
         }
         return sb.toString();
     }
-
+    
     /**
      * TODO(将二进制转换成16进制)    .
      *
@@ -189,5 +221,13 @@ public class AESEncription {
             result[i] = (byte) (high * 16 + low);
         }
         return result;
+    }
+    
+    public static void main(String[] args) {
+        try {
+            System.out.println(AESEncription.encrypt("123456"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
