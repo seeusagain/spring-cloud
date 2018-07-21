@@ -20,7 +20,7 @@ public class AESEncription {
     /**
      * 自定义密钥
      */
-    public static final String SECRET_KEY = "MMT_OAM_AES_SECRET_KEY";
+    public static final String SECRET_KEY = "Butterfly";
     
     /**
      * TODO：加密（使用默认秘钥）
