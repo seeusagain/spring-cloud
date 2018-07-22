@@ -13,8 +13,9 @@ eureka:
     fetch-registry: false #是否从Eureka Server获取注册信息，默认为true
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/microservice-eureka/eureka/
-#  server:
-#    enable-self-preservation: false #关闭自我保护
+  server:
+    enable-self-preservation: false #关闭自我保护
+    eviction-interval-timer-in-ms: 30000 #清理无效服务间隔（单位毫秒，默认是60*1000）
 
 #log
 logging:
