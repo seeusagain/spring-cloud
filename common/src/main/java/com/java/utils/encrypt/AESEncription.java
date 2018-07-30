@@ -49,7 +49,7 @@ public class AESEncription {
         SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
         // 创建密码器
         Cipher cipher = Cipher.getInstance("AES");
-        byte[] byteContent = content.getBytes("GBK");
+        byte[] byteContent = content.getBytes("utf-8");
         // 初始化
         cipher.init(Cipher.ENCRYPT_MODE, key);
         // 加密
@@ -225,7 +225,11 @@ public class AESEncription {
     
     public static void main(String[] args) {
         try {
-            System.out.println(AESEncription.encrypt("123456"));
+            String str = "测试中文TEST-chinese";
+            String str2 = AESEncription.encrypt(str);
+            String str3 = AESEncription.decrypt(str2);
+            System.out.println(str2);
+            System.out.println(str3);
         } catch (Exception e) {
             e.printStackTrace();
         }
