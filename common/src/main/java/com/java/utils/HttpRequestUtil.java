@@ -19,6 +19,8 @@ public class HttpRequestUtil {
 
   private static Logger logger = Logger.getLogger(HttpRequestUtil.class);
 
+  private static final int URL_TIMEOUT_MILLSECONDS = 5000;
+
   /**
    * 获取访问者IP地址
    */
@@ -70,12 +72,17 @@ public class HttpRequestUtil {
 
   /**
    * 测试URL是否有效
-   *
    * @param url
    * @return
+   * @throws Exception
    */
-  private static final int timeOutMillSeconds = 5000;
+  public static boolean validityURL(String url) throws Exception {
+    return validityURL(url, URL_TIMEOUT_MILLSECONDS);
+  }
 
+  /**
+   * 测试URL是否有效
+   */
   public static boolean validityURL(String url, int timeOutMillSeconds) throws Exception {
     if (EmptyUtils.isEmpty(url)) {
       logger.error("校验URL,url空");
@@ -96,28 +103,46 @@ public class HttpRequestUtil {
     }
   }
 
-  public static boolean validityURL(String url) throws Exception {
-    return validityURL(url, timeOutMillSeconds);
-  }
 
   private static final int httpConnectTimeOUT = 5000;
 
   private static final String httpConnectCharset = "utf-8";
 
+  /**
+   * TODO: 调用http接口 GET请求
+   * @param url
+   * @return
+   */
   public static String httpURLConnectionGET(String url) {
     return httpURLConnectionGET(url, httpConnectTimeOUT, httpConnectCharset);
   }
 
+  /**
+   * TODO: 调用http接口 GET请求
+   * @param url
+   * @param httpConnectCharset
+   * @return
+   */
   public static String httpURLConnectionGET(String url, String httpConnectCharset) {
     return httpURLConnectionGET(url, httpConnectTimeOUT, httpConnectCharset);
   }
 
+  /**
+   * TODO: 调用http接口 GET请求
+   * @param url
+   * @param httpConnectTimeOUT
+   * @return
+   */
   public static String httpURLConnectionGET(String url, int httpConnectTimeOUT) {
     return httpURLConnectionGET(url, httpConnectTimeOUT, httpConnectCharset);
   }
 
   /**
-   * 调用http接口 GET请求
+   * TODO: 调用http接口 GET请求
+   * @param url
+   * @param connectTimeOUT
+   * @param httpConnectCharset
+   * @return
    */
   public static String httpURLConnectionGET(String url, int connectTimeOUT,
       String httpConnectCharset) {
