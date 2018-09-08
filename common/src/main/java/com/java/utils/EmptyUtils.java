@@ -18,7 +18,7 @@ public class EmptyUtils {
   }
 
   /**
-   * TODO:都为空
+   * TODO:字符串是否都为空
    *
    * @return true ：都为空；false：有任何一个不为空
    */
@@ -26,18 +26,16 @@ public class EmptyUtils {
     if (null == args || args.length == 0) {
       return true;
     }
-    boolean flag = true;
     for (String str : args) {
-      flag = isEmpty(str);
-      if (!flag) {
-        break;
+      if (isNotEmpty(str)) {
+        return false;
       }
     }
-    return flag;
+    return true;
   }
 
   /**
-   * TODO:都不为空 其实是：isNotEmpty(String... args) 换了个名字
+   * TODO:都不为空
    *
    * @return true：都不为空；false：有任何一个为空
    */
@@ -125,6 +123,22 @@ public class EmptyUtils {
 
   public static boolean isNotEmpty(Integer itg) {
     return !isEmpty(itg);
+  }
+
+  /**
+   * 判断数组
+   */
+  public static boolean isEmptyArray(Object[] obj) {
+    return obj == null || obj.length <= 0;
+  }
+
+  public static boolean isAnyEmptyArray(Object[]... objs) {
+    for (Object[] obj : objs) {
+      if (isEmptyArray(obj)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
