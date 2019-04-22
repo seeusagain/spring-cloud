@@ -1,0 +1,31 @@
+server:
+  port: 8181
+
+spring:
+  application:
+    name: microservice-ha-eureka-server
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 10 #eureka client发送心跳给server端的频率（默认30秒）
+    lease-expiration-duration-in-seconds: 20 #eureka client发送心跳给server端后，续约到期时间（默认90秒）
+#    高可用注册中心不要开启：
+#    preferIpAddress: true
+#    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    register-with-eureka: true #是否吧自己当做服务注册到注册中心，默认为true
+    fetch-registry: true #是否从Eureka Server获取注册信息，默认为true
+    serviceUrl:
+      defaultZone: http://eurekapeer:${server.port}/eureka/
+  server:
+    enable-self-preservation: false #关闭自我保护
+    eviction-interval-timer-in-ms: 35000 #清理无效服务间隔（单位毫秒，默认是1分钟）
+
+#log
+logging:
+  config: classpath:logback-spring.xml
+
+#close security
+security:
+  basic:
+    enabled: false
