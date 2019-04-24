@@ -21,7 +21,6 @@ microservice-zuul/microservice-zuul.iml
 microservice-zuul/target/
 spring-cloud-autopackage/
 spring-cloud.iml
-autopackage.bat
 microservice-exampleSharding/microservice-exampleSharding.iml
 microservice-exampleSharding/target/
 microservice-dynamicDataSource/microservice-dynamicDataSource.iml
@@ -30,3 +29,4 @@ autoRun.bat
 microservice-dynamicDataSource/target/
 microservice-easyUi/target/
 microservice-easyUi/microservice-easyUi.iml
+/data/
