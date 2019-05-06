@@ -3,13 +3,12 @@ package com.java.example.service;
 import com.java.dto.ResultMsg;
 
 /**
- * Created by lu.xu on 2018/3/28.
- * TODO:
+ * Created by lu.xu on 2018/3/28. TODO:
  */
 public interface ITranscationService {
-    /**
-     * 测试事务回滚
-     * @return
-     */
-    ResultMsg testRollback();
+
+  /**
+   * 测试事务回滚
+   */
+  ResultMsg testRollback();
 }

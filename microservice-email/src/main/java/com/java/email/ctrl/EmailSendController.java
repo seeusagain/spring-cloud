@@ -1,10 +1,10 @@
 package com.java.email.ctrl;
 
+import com.java.dto.ResultMsg;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.java.dto.ResultMsg;
 import com.java.dto.mail.MailSenderDto;
 import com.java.email.service.IEmailSenderService;
 import io.swagger.annotations.Api;

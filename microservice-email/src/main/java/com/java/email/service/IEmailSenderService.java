@@ -8,11 +8,12 @@ import com.java.dto.mail.MailSenderDto;
  */
 public interface IEmailSenderService {
 
-    /**
-     * 发送邮件接口
-     * @param mailSenderDto 参数封装
-     * @return {@link ResultMsg}
-     */
-    ResultMsg sendEmail(MailSenderDto mailSenderDto);
+  /**
+   * 发送邮件接口
+   *
+   * @param mailSenderDto 参数封装
+   * @return {@link ResultMsg}
+   */
+  ResultMsg sendEmail(MailSenderDto mailSenderDto);
 
 }

@@ -11,30 +11,25 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient(name = "microservice-basic", fallback = AuthenticationHystrixImpl.class)
 public interface AuthenticationController {
-    String workFlowContentPath = "/microservice-basic";
-    
-    /**
-     * basic 远程登录接口
-     *
-     * @param userName
-     * @param password
-     * @return
-     */
-    @PostMapping(value = workFlowContentPath + "/authentication/login")
-    ResultMsg login(@RequestParam(value = "userName") String userName,
-        @RequestParam(value = "password") String password);
-    
-    /**
-     * 降级，feign上加入： fallback = AuthenticationHystrixImpl.class，此处调用不存在的地址
-     * @return
-     */
-    @PostMapping(value = workFlowContentPath + "/authentication/loginXXX")
-    ResultMsg loginForFallback();
-    
-    /**
-     * basic 睡眠3秒方法
-     * @return
-     */
-    @GetMapping(value = workFlowContentPath + "/authentication/sleep")
-    String sleep();
+
+  String workFlowContentPath = "/microservice-basic";
+
+  /**
+   * basic 远程登录接口
+   */
+  @PostMapping(value = workFlowContentPath + "/authentication/login")
+  ResultMsg login(@RequestParam(value = "userName") String userName,
+      @RequestParam(value = "password") String password);
+
+  /**
+   * 降级，feign上加入： fallback = AuthenticationHystrixImpl.class，此处调用不存在的地址
+   */
+  @PostMapping(value = workFlowContentPath + "/authentication/loginXXX")
+  ResultMsg loginForFallback();
+
+  /**
+   * basic 睡眠3秒方法
+   */
+  @GetMapping(value = workFlowContentPath + "/authentication/sleep")
+  String sleep();
 }

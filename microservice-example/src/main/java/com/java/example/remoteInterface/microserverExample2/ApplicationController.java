@@ -3,8 +3,6 @@ package com.java.example.remoteInterface.microserverExample2;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.java.dto.ResultMsg;
-
 /**
  * example2接口
  */

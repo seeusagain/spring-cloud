@@ -1,7 +1,6 @@
 package com.java.example.ctrl;
 
 import com.java.example.service.IHystrixTestService;
-import com.java.dto.ResultMsg;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Api(description = "熔断测试")
 @RestController

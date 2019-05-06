@@ -1,6 +1,6 @@
 package com.java.controller;
 
-import com.java.dto.ResultMsg2;
+import com.java.dto.ResultMsg;
 import com.java.service.ITestService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +27,7 @@ public class TestController {
       @ApiImplicitParam(name = "userName", value = "姓名", paramType = "query"),
       @ApiImplicitParam(name = "contractNumber", value = "合同号", paramType = "query")})
   @RequestMapping(value = "/query", method = RequestMethod.POST)
-  public ResultMsg2 query(
+  public ResultMsg query(
       @RequestParam(value = "userName", required = false) String userName,
       @RequestParam(value = "contractNumber", required = false) String contractNumber) {
     return this.testService.query(userName, contractNumber);
@@ -37,7 +37,7 @@ public class TestController {
   @ApiImplicitParams({
       @ApiImplicitParam(name = "esId", value = "esId", paramType = "query")})
   @RequestMapping(value = "/queryById", method = RequestMethod.POST)
-  public ResultMsg2 queryById(
+  public ResultMsg queryById(
       @RequestParam(value = "esId", required = true) String esId) {
     return this.testService.queryById(esId);
   }

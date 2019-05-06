@@ -1,8 +1,6 @@
 package com.java.example.ctrl;
 
-import com.java.dto.ResultMsg;
 import com.java.example.service.IFeignTestService;
-import com.java.example.service.IHystrixTestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Api(description = "feign远程调用其他组件测试")
 @RestController

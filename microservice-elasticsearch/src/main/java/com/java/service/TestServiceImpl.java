@@ -1,6 +1,6 @@
 package com.java.service;
 
-import com.java.dto.ResultMsg2;
+import com.java.dto.ResultMsg;
 import com.java.dto.TestEs;
 import com.java.repository.TestRepository;
 import com.java.utils.EmptyUtils;
@@ -23,13 +23,13 @@ public class TestServiceImpl implements ITestService {
   private TestRepository testRepository;
 
   @Override
-  public ResultMsg2 queryById(String esId) {
+  public ResultMsg queryById(String esId) {
     TestEs testEs = this.testRepository.findOne(esId);
-    return ResultMsg2.ok("查询成功", testEs);
+    return ResultMsg.ok("查询成功", testEs);
   }
 
   @Override
-  public ResultMsg2 query(String userName, String contractNumber) {
+  public ResultMsg query(String userName, String contractNumber) {
     if (EmptyUtils.isAllEmpty(userName, contractNumber)) {
       throw new RuntimeException("查询属性必须要有");
     }
@@ -48,6 +48,6 @@ public class TestServiceImpl implements ITestService {
     SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(functionScoreQueryBuilder)
         .build();
     Page<TestEs> searchPageResults = testRepository.search(searchQuery);
-    return ResultMsg2.ok("查询成功", searchPageResults);
+    return ResultMsg.ok("查询成功", searchPageResults);
   }
 }
