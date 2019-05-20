@@ -51,4 +51,11 @@ hystrix:
         isolation:
           strategy: THREAD
           thread:
-            timeoutInMilliseconds: 60000
+            timeoutInMilliseconds: 3000
+
+#服务下线后，zuul重试
+ribbon:
+  OkToRetryOnAllOperations: true #是否所有操作都重试，若false则仅get请求重试
+  MaxAutoRetriesNextServer: 1 #重试负载均衡其他实例最大重试次数,不含首次实例
+  MaxAutoRetries: 0   #(同一实例最大重试次数,不含首次调用)
+  retryableStatusCodes: 404,500,503
