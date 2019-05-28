@@ -11,7 +11,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>mservice-eureka</artifactId>
+  <artifactId>mservice-eureka-client</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>mservice-eureka-client</name>
   <description>注册中心</description>

@@ -11,9 +11,9 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>mservice-eureka-clent</artifactId>
+  <artifactId>mservice-eureka-server</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>mservice-eureka</name>
+  <name>mservice-eureka-server</name>
   <description>客户端</description>
   <packaging>jar</packaging>
 
