@@ -1,6 +1,5 @@
 server:
-  port: 8181
-  context-path: /microservice-eureka #  pom中的finalName
+  port: 5678
 
 #eureka
 eureka:
@@ -12,10 +11,10 @@ eureka:
     register-with-eureka: false #是否将自己注册到Eureka Server，默认为true
     fetch-registry: false #是否从Eureka Server获取注册信息，默认为true
     serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/microservice-eureka/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     enable-self-preservation: false #关闭自我保护
-    eviction-interval-timer-in-ms: 30000 #清理无效服务间隔（单位毫秒，默认是60*1000）
+    eviction-interval-timer-in-ms: 5000 #清理无效服务间隔（单位毫秒，默认是60*1000）
 
 #log
 logging:

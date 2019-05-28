@@ -1,11 +1,7 @@
 package com.java;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 
@@ -15,9 +11,16 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * 本地jar直接运行
  */
 public class ApplicationEureka {
-    public static void main(String[] args) {
-        SpringApplication.run(ApplicationEureka.class, args);
-    }
+
+  public static void main(String[] args) {
+    SpringApplication.run(ApplicationEureka.class, args);
+
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    System.out.println("----microservice-eureka started-----");
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  }
 }
 
 /**

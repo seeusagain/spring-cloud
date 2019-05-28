@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.dao.UserInfo2Mapper">
+  <resultMap id="BaseResultMap" type="com.java.entity.UserInfo2">
+    <!--@mbg.generated generated on Tue May 28 15:10:03 CST 2019.-->
+    <id column="user_id" jdbcType="VARCHAR" property="userId"/>
+    <result column="user_pwd" jdbcType="VARCHAR" property="userPwd"/>
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+    <result column="email" jdbcType="VARCHAR" property="email"/>
+    <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+    <result column="last_login_date" jdbcType="TIMESTAMP" property="lastLoginDate"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated generated on Tue May 28 15:10:03 CST 2019.-->
+    user_id, user_pwd, user_name, email, mobile, create_date, last_login_date
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_info2
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

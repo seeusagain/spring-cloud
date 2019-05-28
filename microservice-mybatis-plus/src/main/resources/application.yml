@@ -1,0 +1,39 @@
+server:
+  port: 8123
+
+spring:
+  application:
+    name: microservice-mybatis-plus
+  #default-dataSource
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+    username: user
+    password: password
+    test-on-borrow: false
+    test-while-idle: true
+    time-between-eviction-runs-millis: 3600000
+    validation-query: select 1
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 5 #eureka client发送心跳给server端的频率（默认30秒）
+    lease-expiration-duration-in-seconds: 10 #eureka client发送心跳给server端后，续约到期时间（默认90秒）
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:5678/eureka/
+
+logging:
+  config: classpath:logback-spring.xml
+  #mybatis日志
+  level:
+    com:
+      java:
+        dao: debug
+
+#using mybatis-plus
+mybatis-plus:
+    mapper-locations: classpath:mybatis/*.xml
+    type-aliases-package: com.java.dao
