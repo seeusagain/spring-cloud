@@ -42,6 +42,9 @@ zuul:
       login: /authentication/login
 # 文件上传由于content-type 是multipart/form-data，无法从request中获取参数，故在组件内自行校验
       fileUpload: /file/fileUpload
+#设置zuul的信号量隔离，这个在压测的时候会体现出来，zuul会控制单个接口信号量，默认超过100就返回500
+  semaphore:
+    max-semaphores: 1000
 
 #单个请求时长，默认是1000ms，太短
 hystrix:
