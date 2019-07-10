@@ -71,6 +71,15 @@ ribbon:
   MaxAutoRetriesNextServer: 1 #重试负载均衡其他实例最大重试次数,不含首次实例
   MaxAutoRetries: 0   #(同一实例最大重试次数,不含首次调用)
   retryableStatusCodes: 404,500,503
+
+
+#针对单个服务设置ribbon
+microservice-mybatis-plus:
+  ribbon:
+    OkToRetryOnAllOperations: true
+    MaxAutoRetriesNextServer: 1
+    MaxAutoRetries: 0
+    retryableStatusCodes: 404,500,503
     #  这里需要结合hystrix时长配置，例如熔断时间是10s，这里是1s，则熔断时间无效
-    ConnectTimeout: 120000
-    ReadTimeout: 120000
+    ConnectTimeout: 180000
+    ReadTimeout: 180000
