@@ -81,5 +81,5 @@ microservice-mybatis-plus:
     MaxAutoRetries: 0
     retryableStatusCodes: 404,500,503
     #  这里需要结合hystrix时长配置，例如熔断时间是10s，这里是1s，则熔断时间无效
-    ConnectTimeout: 180000
-    ReadTimeout: 180000
+    ConnectTimeout: 100000
+    ReadTimeout: 100000
