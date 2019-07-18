@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: microservice-rabbit
+
+  rabbitmq:
+    host: 10.10.10.1
+    port: 56720
+    virtual-host: A_TO_B_VHOST
+    username: A_TO_B_producer
+    password: 1234567
+    connection-timeout: 2000
+
+logging:
+  config: classpath:logback-spring.xml

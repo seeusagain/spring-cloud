@@ -47,6 +47,8 @@
     <module>microservice-ha-eureka-server</module>
     <module>microservice-elasticsearch</module>
     <module>microservice-mybatis-plus</module>
+    <module>microservice-kafka</module>
+    <module>microservice-rabbit</module>
   </modules>
 
   <!--公共依赖,需要被子模块继承，需要写在dependencyManagement中-->
