@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: microservice-hbase
+
+hbase:
+  zookeeper:
+    quorum: 10.10.10.10
+    property:
+      clientPort: 2181
+logging:
+  config: classpath:logback-spring.xml
