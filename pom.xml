@@ -49,6 +49,7 @@
     <module>microservice-mybatis-plus</module>
     <module>microservice-kafka</module>
     <module>microservice-rabbit</module>
+    <module>microservice-hbase</module>
   </modules>
 
   <!--公共依赖,需要被子模块继承，需要写在dependencyManagement中-->

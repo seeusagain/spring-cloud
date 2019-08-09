@@ -41,7 +41,7 @@
   </appender>
   <!-- * 通配符 设置log打印级别 对所有类有效TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF-->
   <!--将上面的appender添加到root-->
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="FILE"/>
   </root>
